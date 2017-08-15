@@ -1,34 +1,54 @@
-var TestResultSpec = function(result, units, ticks, colors, standard, labels, decimals, gradient, endCaps, height, width) {
+var TestResultOptions = function(options) {
+    var newopts = {
+        "result": options.result,
+        "units": options.units,
+        "ticks": options.ticks,
+        "colors": options.colors,
+        "standard": options.standard,
+        "labels": options.labels || [],
+        "decimals": options.decimals || 2,
+        "gradient": options.gradient || false,
+        "endCaps": options.endCaps || ["transparent", "transparent"],
+        "height": options.height || 100,
+        "width": options.width || 900
+    };
+
+    return newopts;
+}
+
+
+
+var TestResultSpec = function(options) {
 
     var testResultObj = {
         "name":"testResult",
         "values": [{
-        "result":result,
-        "units": units
+        "result":options.result,
+        "units": options.units
     }]
     }
 
     var buildRanges = function(){
         var std = "non";
-        if (standard[0] == ticks[0] & standard[1] == ticks[1]){
+        if (options.standard[0] == options.ticks[0] & options.standard[1] == options.ticks[1]){
             std = "std"
         }
         // initial range
         var rangesVals = [
-            {"start":ticks[0], "end":ticks[1], "fill": colors[0],"standard":std, "label":labels[0]}
+            {"start":options.ticks[0], "end":options.ticks[1], "fill": options.colors[0],"standard":std, "label":options.labels[0]}
         ];
 
-        for (i = 2; i < ticks.length; i++){
+        for (i = 2; i < options.ticks.length; i++){
             std = "non";
-            if (ticks[i-1]==standard[0] & ticks[i]==standard[1]){
+            if (options.ticks[i-1]==options.standard[0] & options.ticks[i]==options.standard[1]){
                 std = "std";
             }
             var newRange = {
-                "start": ticks[i-1],
-                "end": ticks[i],
-                "fill":colors[i-1],
+                "start": options.ticks[i-1],
+                "end": options.ticks[i],
+                "fill":options.colors[i-1],
                 "standard": std,
-                "label":labels[i-1]
+                "label":options.labels[i-1]
             }
             rangesVals.push(newRange);
         }
@@ -42,14 +62,14 @@ var TestResultSpec = function(result, units, ticks, colors, standard, labels, de
 
     var buildTickObj = function (){
         var tickVals = [];
-        for (i = 0; i < ticks.length; i++) {
+        for (i = 0; i < options.ticks.length; i++) {
             var u = {}
-            u.point = ticks[i];
-            u.label = ticks[i].toFixed(decimals);
+            u.point = options.ticks[i];
+            u.label = options.ticks[i].toFixed(options.decimals);
 
             var color = "white";
-            if (gradient) {
-                if (0 < i < ticks.length) {
+            if (options.gradient) {
+                if (0 < i < options.ticks.length) {
                     color = "transparent"
                 }
             }
@@ -67,8 +87,8 @@ var TestResultSpec = function(result, units, ticks, colors, standard, labels, de
         var endCapsObj = {
             "name":"endCaps",
             "values":[
-                {"pointing":"triangle-left", "fill":endCaps[0], "x":ticks[0]},
-                {"pointing":"triangle-right", "fill":endCaps[1], "x":ticks[ticks.length-1]},
+                {"pointing":"triangle-left", "fill":options.endCaps[0], "x":options.ticks[0]},
+                {"pointing":"triangle-right", "fill":options.endCaps[1], "x":options.ticks[options.ticks.length-1]},
             ]
         };
 
@@ -80,8 +100,8 @@ var TestResultSpec = function(result, units, ticks, colors, standard, labels, de
         var endPointsObj = {
             "name": "endPoints",
             "values": [
-                {"start": ticks[0],
-                "end": ticks[ticks.length-1]
+                {"start": options.ticks[0],
+                "end": options.ticks[ticks.length-1]
                 }
             ]
         };
@@ -89,8 +109,8 @@ var TestResultSpec = function(result, units, ticks, colors, standard, labels, de
     }
 
     var scalePoint = function(point) {
-        var min = ticks[0];
-        var max = ticks[ticks.length-1];
+        var min = options.ticks[0];
+        var max = options.ticks[options.ticks.length-1];
         return (point-min) / (max-min);
     }
 
@@ -159,8 +179,8 @@ var TestResultSpec = function(result, units, ticks, colors, standard, labels, de
 
     var buildBaselineRect = function() {
 
-        var src = gradient ? "endPoints" : "ranges";
-        var fillObj = gradient ? buildGradient(rangesObj) : {"field":"fill"};
+        var src = options.gradient ? "endPoints" : "ranges";
+        var fillObj = options.gradient ? buildGradient(rangesObj) : {"field":"fill"};
         var temp = {
             "type":"rect",
             "from":{"data":src},
@@ -182,7 +202,7 @@ var TestResultSpec = function(result, units, ticks, colors, standard, labels, de
     var tickObj = buildTickObj();
     var endCapsObj = buildEndCaps();
     var rectObj = buildBaselineRect();
-    var rangeWidth = width - 26;
+    var rangeWidth = options.width - 26;
 
     var buildSpec = function(){
         var endPointsObj = {
@@ -192,7 +212,7 @@ var TestResultSpec = function(result, units, ticks, colors, standard, labels, de
                 {"type": "aggregate",
                 "fields":["start","end"],
                 "ops":["min","max"],
-                "as":["start", "p2"]
+                "as":["start", "end"]
                 }
             ]
         };
@@ -213,13 +233,27 @@ var TestResultSpec = function(result, units, ticks, colors, standard, labels, de
                 {
                     "name": "ranges",
                     "type": "linear",
-                    "domain":[ticks[0],ticks[ticks.length-1]],
+                    "domain":[options.ticks[0],options.ticks[options.ticks.length-1]],
                     "range":[0,rangeWidth],
                     "zero":false
                 }
             ],
 
             "marks": [
+                {
+                    "type":"symbol",
+                    "from":{"data":"endCaps"},
+                    "encode": {
+                        "enter": {
+                            "x":{"signal":"datum.pointing=='triangle-right' ? scale('ranges',datum.x)+26 : scale('ranges', datum.x)"},
+                            "shape": {"field":"pointing"},
+                            "size":{"value":900},
+                            "fill":{"field":"fill"},
+                            "yc": {"signal":"(height/2)+(blockHeight/2)"},
+                            "stroke":{"field":"stroke"}
+                        }
+                    }
+                },
                 {
                     "type":"group",
                     "encode": {
@@ -364,22 +398,7 @@ var TestResultSpec = function(result, units, ticks, colors, standard, labels, de
                             ]
                         }
                     ]
-                },
-                {
-                    "type":"symbol",
-                    "from":{"data":"endCaps"},
-                    "encode": {
-                        "enter": {
-                            "x":{"signal":"datum.pointing=='triangle-right' ? scale('ranges',datum.x)+26 : scale('ranges', datum.x)"},
-                            "shape": {"field":"pointing"},
-                            "size":{"value":900},
-                            "fill":{"field":"fill"},
-                            "yc": {"signal":"(height/2)+(blockHeight/2)"},
-                            "stroke":{"field":"stroke"}
-                        }
-                    }
                 }
-
             ]
         };
 
