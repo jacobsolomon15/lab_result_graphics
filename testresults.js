@@ -1,3 +1,28 @@
+/*
+MIT License
+
+Copyright (c) 2017 Jacob Solomon
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/
+
+
 var TestResultOptions = function(options) {
     var newopts = {
         "result": options.result,
@@ -22,11 +47,16 @@ var TestResultSpec = function(options) {
 
     var testResultObj = {
         "name":"testResult",
-        "values": [{
-        "result":options.result,
-        "units": options.units
-    }]
-    }
+        "values": [
+            {
+                "result":options.result,
+                "units": options.units
+            }
+            ]
+        }
+
+    var resultLabelWidth = (8*(testResultObj.values[0].result.toString().length + testResultObj.values[0].units.length + 1))+10; // Based on an average character width of 8 pixels (at 12px font), plus a small buffer
+
 
     var buildRanges = function(){
         var std = "non";
@@ -36,7 +66,7 @@ var TestResultSpec = function(options) {
         // initial range
         var rangesVals = [
             {"start":options.ticks[0], "end":options.ticks[1], "fill": options.colors[0],"standard":std, "label":options.labels[0]}
-        ];
+            ];
 
         for (i = 2; i < options.ticks.length; i++){
             std = "non";
@@ -225,7 +255,8 @@ var TestResultSpec = function(options) {
             "height": 100,
             "signals" : [
                 {"name": "blockHeight", "value":30},
-                {"name":"tickGap", "value": 2}
+                {"name":"tickGap", "value": 2},
+                {"name": "resultLabelWidth", "value": resultLabelWidth}
             ],
 
             "data": data,
@@ -288,7 +319,7 @@ var TestResultSpec = function(options) {
                                     "stroke":{"value":"black"},
                                     "strokeWidth":{"value":2},
                                     "xc":{"scale":"ranges", "field":"result"},
-                                    "width":{"signal":"2*blockHeight"},
+                                    "width":{"signal":"resultLabelWidth"},
                                     "height":{"signal":"blockHeight"},
                                     "cornerRadius":{"value":3},
                                     "clip":{"value":false}
@@ -299,10 +330,10 @@ var TestResultSpec = function(options) {
                                     "type":"rule",
                                     "encode":{
                                         "enter":{
-                                            "x":{"value":23},
-                                            "x2": {"value":37},
-                                            "y":{"value":30.5},
-                                            "y2":{"value":30.5},
+                                            "x":{"signal":"resultLabelWidth/2 - 8"},
+                                            "x2": {"signal":"resultLabelWidth/2 + 8"},
+                                            "y":{"signal":"blockHeight+0.5"},
+                                            "y2":{"signal":"blockHeight+0.5"},
                                             "stroke":{"value":"white"},
                                             "strokeWidth":{"value":3}
                                         }
@@ -317,8 +348,8 @@ var TestResultSpec = function(options) {
                                             },
                                             "stroke": {"value":"black"},
                                             "strokeWidth": {"value":2},
-                                            "x":{"value":20},
-                                            "y":{"value":30.5}
+                                            "x":{"signal":"resultLabelWidth/2 - 10"},
+                                            "y":{"signal":"blockHeight+0.5"}
                                         }
                                     }
                                 },
@@ -333,8 +364,8 @@ var TestResultSpec = function(options) {
                                             "text":{"signal":"datum.result + ' ' + datum.units"},
                                             "align":{"value":"center"},
                                             "baseline":{"value":"alphabetic"},
-                                            "dx":{"value":30.5},
-                                            "dy":{"value":20}
+                                            "dx":{"signal":"resultLabelWidth/2"},
+                                            "dy":{"signal":"0.667*blockHeight"}
                                         }
                                     }
                                 },
@@ -346,7 +377,7 @@ var TestResultSpec = function(options) {
                                             "text":{"value":"Your Result"},
                                             "dy":{"value":-5},
                                             "align":{"value":"center"},
-                                            "dx":{"value":"30.5"}
+                                            "dx":{"signal":"resultLabelWidth/2"}
                                         }
                                     }
                                 }

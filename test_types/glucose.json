@@ -1,0 +1,9 @@
+{
+    "units": "mg/dL",
+    "ticks": [65,70,80,140,200,300],
+    "colors": ["orange","yellow","green","yellow","orange"],
+    "labels": ["Low", "Borderline Low", "Standard Range", "Borderline High", "High"],
+    "standard": [80,140],
+    "endCaps": ["orange","orange"],
+    "decimals": 0
+}

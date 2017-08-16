@@ -1,0 +1,9 @@
+{
+    "units": "%",
+    "ticks": [18,36,40,50,54,60],
+    "colors": ["orange","yellow","green","yellow","orange"],
+    "labels": ["Low", "Borderline Low", "Standard Range", "Borderline High", "High"],
+    "standard": [40,50],
+    "endCaps": ["red","red"],
+    "decimals": 1
+}

@@ -1,0 +1,9 @@
+{
+    "units": "g/dL",
+    "ticks": [6,10,12,13.5,17.5,18.5,20],
+    "colors": ["red","orange","yellow","green","yellow","orange"],
+    "labels": ["Very Low","Low", "Borderline Low", "Standard Range", "Borderline High", "High"],
+    "standard": [13.5,17.5],
+    "endCaps": ["red","red"],
+    "decimals": 1
+}

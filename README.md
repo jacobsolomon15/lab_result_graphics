@@ -96,4 +96,48 @@ This example will produce a graphic visualizing a patient's Hemoglobin A1c resul
 ```
 
 This code produces the following:
-![example_screenshot](http://github.com/jacobsolomon15/lab_result_graphics/example_a1c.png)
+![example_screenshot](example_a1c.png)
+
+## Pre-set test parameters
+As described at [http://mylabresults.org/about](mylabresults.org), these graphics are part of a research project to help patients understand their test results. We have developed some parameters for a small set of tests, and these are available in the `test_types` directory as json file. **DISCLAIMER** All information provided by MyLabResults.org and in this repository, including the standard ranges, categories, and labels used in the displays, should NOT be taken as medical advice or verified medical data of any kind. The categories and numbers used in these graphics have only been reviewed by a few doctors and cannot be interpreted to represent the consensus judgment of the medical community.
+
+To use these pre-set parameters for a specific type of test, load one of the files into your script as a variable using your preferred method (the example below uses jQuery and ajax), add a result property and value, then create the TestResultOptions object. You can also adjust any other properties as needed, such as using a gradient.
+
+``` html
+<body>
+    <h1>Hemoglobin a1c Test Result</h1>
+    <div id="view">
+
+    </div>
+    <script>
+
+    var a1c = (function () {
+        var json = null;
+        $.ajax({
+            'async': false,
+            'global': false,
+            'url': 'test_types/a1c.json',
+            'dataType': "json",
+            'success': function (data) {
+                json = data;
+            }
+        });
+        return json;
+    })();
+    a1c.result = 7.3;
+    a1c.gradient = true;
+
+    var s = new TestResultOptions(a1c);
+    var spec = new TestResultSpec(s).buildSpec();
+
+    var view = new vega.View(vega.parse(spec))
+          .renderer('svg')
+          .initialize('#view')
+          .hover()
+          .run();
+    </script>
+</body>
+</html>
+```
+This produces the following:
+![example_screenshot](example_a1c_gradient.png)

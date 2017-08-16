@@ -1,0 +1,9 @@
+{
+    "units": "mmol/L",
+    "ticks": [90,98,108,115],
+    "colors": ["gray","green","gray"],
+    "labels": ["","Standard Range", ""]
+    "standard": [98,108],
+    "endCaps": ["gray", "gray"],
+    "decimals": 0
+}

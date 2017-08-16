@@ -1,0 +1,9 @@
+{
+    "units": "mg/dL",
+    "ticks": [50,150,200,500,750],
+    "colors": ["green","yellow","orange","red"],
+    "labels": ["Standard Range", "Borderline High", "High", "Very High"],
+    "standard": [50,150],
+    "endCaps": ["transparent", "red"],
+    "decimals": 0
+}

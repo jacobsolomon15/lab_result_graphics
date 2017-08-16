@@ -1,0 +1,9 @@
+{
+    "units": "IU/L",
+    "ticks": [5,8,30,50],
+    "colors": ["gray","green","gray"],
+    "labels": ["","Standard Range", ""]
+    "standard": [8,30],
+    "endCaps": ["gray", "gray"],
+    "decimals": 1
+}

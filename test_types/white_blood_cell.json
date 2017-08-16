@@ -1,0 +1,9 @@
+{
+    "units": "K/ul",
+    "ticks": [0,1,4,10,12,20],
+    "colors": ["orange","yellow","green","yellow","orange"],
+    "labels": ["Low", "Borderline Low", "Standard Range", "Borderline High", "High"],
+    "standard": [4,10],
+    "endCaps": ["red","red"],
+    "decimals": 0
+}

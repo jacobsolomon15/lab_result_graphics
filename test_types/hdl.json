@@ -1,0 +1,9 @@
+{
+    "units": "mg/dL",
+    "ticks": [20,30,40,65],
+    "colors": ["red","yellow","green"],
+    "labels": ["Very Low", "Low", "Standard Range"],
+    "standard": [40,65],
+    "endCaps": ["red","transparent"],
+    "decimals": 0
+}
