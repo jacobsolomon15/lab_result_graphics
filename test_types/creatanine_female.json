@@ -2,7 +2,7 @@
     "units": "mg/dL",
     "ticks": [0.3,0.5,1.0,2.2],
     "colors": ["gray","green","gray"],
-    "labels": ["","Standard Range", ""]
+    "labels": ["","Standard Range", ""],
     "standard": [0.5,1.0],
     "endCaps": ["gray", "gray"],
     "decimals": 1

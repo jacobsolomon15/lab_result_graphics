@@ -2,7 +2,7 @@
     "units": "g/dL",
     "ticks": [4.5,6.2,8.3,10],
     "colors": ["gray","green","gray"],
-    "labels": ["","Standard Range", ""]
+    "labels": ["","Standard Range", ""],
     "standard": [6.2,8.3],
     "endCaps": ["gray", "gray"],
     "decimals": 1

@@ -2,7 +2,7 @@
     "units": "mmol/L",
     "ticks": [18,22,34,40],
     "colors": ["gray","green","gray"],
-    "labels": ["","Standard Range", ""]
+    "labels": ["","Standard Range", ""],
     "standard": [22,34],
     "endCaps": ["gray", "gray"],
     "decimals": 0
