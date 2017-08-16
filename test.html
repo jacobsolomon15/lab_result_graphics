@@ -1,0 +1,138 @@
+<html>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+<script src="https://vega.github.io/vega/vega.js"></script>
+<script src="testresults.js"></script>
+<script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+
+
+<body>
+    <div class="container">
+        <h1>Test Result Generator</h1>
+        <div id="inputs">
+            <form id="inputs">
+            <label>Test Type</label>
+            <select id="test_type">
+                <option>a1c.json</option>
+                <option>albumin.json</option>
+                <option>alkaline.json</option>
+                <option>alt.json</option>
+                <option>ast.json</option>
+                <option>bilirubin_direct.json</option>
+                <option>bilirubin_total.json</option>
+                <option>calcium.json</option>
+                <option>chloride.json</option>
+                <option>cholesterol_combined.json</option>
+                <option>co2.json</option>
+                <option>
+                    creatanine_female.json
+                </option>
+                <option>
+                    creatanine_male.json
+                </option>
+                <option>
+                    glucose.json
+                </option>
+                <option>
+                    hdl.json
+                </option>
+                <option>
+                    hematocrit_female.json
+                </option>
+                <option>
+                    hematocrit_male.json
+                </option>
+                <option>
+                    hemoglobin_female.json
+                </option>
+                <option>
+                    hemoglobin_male.json
+                </option>
+                <option>
+                    inr.json
+                </option>
+                <option>
+                    ldl.json
+                </option>
+                <option>phosphorous.json</option>
+                <option>
+                    platelet_female.json
+                </option>
+                <option>
+                    platelet_male.json
+                </option>
+                <option>
+                    potassium.json
+                </option>
+                <option>
+                    protein.json
+                </option>
+                <option>
+                    sodium.json
+                </option>
+                <option>
+                    triglycerides.json
+                </option>
+                <option>
+                    tsh.json
+                </option>
+                <option>
+                    urea_nitrogen.json
+                </option>
+                <option>
+                    white_blood_cell.json
+                </option>
+            </select>
+            <label>Result:</label>
+            <input type="number" id="result" step="any" />
+            <label>Gradient</label>
+            <input type="checkbox" id="gradient"  />
+            <input type="button" id="go" value="Go"/>
+        </form>
+        </div>
+        <div id="view">
+
+        </div>
+    </div>
+    <script>
+    $('#go').click(function(){
+
+    $('#view').html("");
+
+    var test_type = $.trim($('#test_type option:selected').text());
+    var res = $('#result').val();
+    var grad = $("#gradient").is(":checked") ? true : false;
+
+
+
+    var opts = (function () {
+        var json = null;
+        $.ajax({
+            'async': false,
+            'global': false,
+            'url': 'test_types/'+test_type,
+            'dataType': "json",
+            'success': function (data) {
+                json = data;
+            }
+        });
+        return json;
+    })();
+
+    opts.result = res;
+    opts.gradient = grad;
+
+
+
+    var s = new TestResultOptions(opts);
+    var spec = new TestResultSpec(s).buildSpec();
+
+    var view = new vega.View(vega.parse(spec))
+          .renderer('svg')  // set renderer (canvas or svg)
+          .initialize('#view') // initialize view within parent DOM container
+          .hover()             // enable hover encode set processing
+          .run();
+
+});
+    </script>
+</body>
+</html>

@@ -56,8 +56,8 @@ var TestResultSpec = function(options) {
         }
 
     var resultLabelWidth = (8*(testResultObj.values[0].result.toString().length + testResultObj.values[0].units.length + 1))+10; // Based on an average character width of 8 pixels (at 12px font), plus a small buffer
-    if (resultLabelWidth < 30) {
-        resultLabelWidth = 30;
+    if (resultLabelWidth < 45) {
+        resultLabelWidth = 45;
     }
 
     var buildRanges = function(){

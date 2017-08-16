@@ -1,5 +1,5 @@
 {
-    "units": "K/ul",
+    "units": "x 10^9/L",
     "ticks": [0,20,100,150,400,450,500],
     "colors": ["red","orange","yellow","green","yellow","orange"],
     "labels": ["Very Low","Low", "Borderline Low", "Standard Range", "Borderline High", "High"],
