@@ -6,7 +6,7 @@ var TestResultOptions = function(options) {
         "colors": options.colors,
         "standard": options.standard,
         "labels": options.labels || [],
-        "decimals": options.decimals || 2,
+        "decimals": options.decimals || 1,
         "gradient": options.gradient || false,
         "endCaps": options.endCaps || ["transparent", "transparent"],
         "height": options.height || 100,
