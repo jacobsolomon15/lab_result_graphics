@@ -1,5 +1,4 @@
-# H1
-Test Result Graphics
+# Test Result Graphics
 
 This module will produce graphics that can help patients understand their test results. This module produces a specification object that can be passed to [Vega](https://vega.github.io/vega/) in order to produce a graphic.
 
@@ -13,15 +12,15 @@ To produce a graphic, you must first create a specification, which is then passe
 
 | name | description |
 | ---- | ----------- |
-| result | *required* The numeric value of the test result |
-| units | *required* A string indicating the test units (e.g. '%' or 'mg/dL')|
-| ticks | *required* An array of points on the number line that delineate different ranges. E.g. [3, 4, 4.5, 5.6, 6.5, 8, 10]. A tick mark and label will appear at each of these points. These points also identify the borders for different colors on the number line |
-| colors | An array of colors, in hexidecimal format or predefined color names, to fill the space between each tick point. E.g. ["orange", "yellow", "green", "yellow", "orange", "#FF0222"]. This array should have a length of ticks.length - 1 so that each gap between ticks has a fill identified |
-| standard | *required* An array of two points that indicate the low and high points in the test's "standard range." E.g. [4.5, 5.6] |
-| labels | An array of labels for the ranges between tick points. E.g. ["Low", "Borderline Low", "Standard Range", "Borderline High", "High", "Very High"]. |
+| result | *required*   The numeric value of the test result |
+| units | *required*   A string indicating the test units (e.g. '%' or 'mg/dL')|
+| ticks | *required*   An array of points on the number line that delineate different ranges. E.g. `[3, 4, 4.5, 5.6, 6.5, 8, 10]`. A tick mark and label will appear at each of these points. These points also identify the borders for different colors on the number line |
+| colors | *required*   An array of colors, in hexidecimal format or predefined color names, to fill the space between each tick point. E.g. `["orange", "yellow", "green", "yellow", "orange", "#FF0222"]`. This array should have a length of ticks.length - 1 so that each gap between ticks has a fill identified |
+| standard | *required*   An array of two points that indicate the low and high points in the test's "standard range." E.g. `[4.5, 5.6]` |
+| labels | An array of labels for the ranges between tick points. E.g. `["Low", "Borderline Low", "Standard Range", "Borderline High", "High", "Very High"]`. |
 | decimals | The number of decimal points to show on labels *(default is 1)* |
 | gradient | A boolean indicating whether the graph should use gradients. If gradients are used, the full width of the standard range is shown in the solid color indicated in the colors array. Then, a gradient extends in each direction and ends at the point that is 40% of the way to the next tick mark, where a new gradient begins. |
-| endCaps | An array of two hexidecimal colors to fill the arrows on each end of the number line. E.g. ["orange, #FF0222"]. The default value is ["transparent", "transparent"] which hide both arrows |
+| endCaps | An array of two hexidecimal colors to fill the arrows on each end of the number line. E.g. `["orange, #FF0222"]`. The default value is `["transparent", "transparent"]` which hide both arrows |
 | height | The height in pixels of the whole graphic. Default is 100 |
 | width | The width in pixels of the whole graphic. Default is 900 |
 
@@ -54,3 +53,47 @@ var view = new vega.View(vega.parse(spec))
 ```
 
 This will insert the graphic into the specified element (e.g. "#view" in this example) on your page.
+
+## A Complete Example
+
+This example will produce a graphic visualizing a patient's Hemoglobin A1c result.
+
+
+``` html
+<html>
+    <head>
+        <script src="vega.min.js"></script>
+        <script src="testresults.js"></script>
+    </head>
+    <body>
+        <h1>Hemoglobin a1c Test Result</h1>
+        <div id="view"></div>
+        <script>
+        var opts = {
+            "result": 5.8,
+            "units": "%",
+            "ticks": [3, 4, 4.5, 5.6, 6.5, 8, 10],
+            "colors": ["orange", "yellow", "green", "yellow", "orange", "red"],
+            "standard": [4.5, 5.6],
+            "labels": ["Low", "Borderline Low", "Standard Range", "Borderline High", "High", "Very High"],
+            "endCaps": ["red", "red"],
+            "gradient":false,
+            "decimals": 1
+        };
+
+        var s = new TestResultOptions(opts);
+        var spec = new TestResultSpec(s).buildSpec();
+
+        var view = new vega.View(vega.parse(spec))
+              .renderer('svg')
+              .initialize('#view')
+              .hover()
+              .run();
+        </script>
+
+    </body>
+</html>
+```
+
+This code produces the following:
+![example_screenshot](http://github.com/jacobsolomon15/lab_result_graphics/example_a1c.png)
